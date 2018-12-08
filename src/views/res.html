@@ -67,7 +67,7 @@
             
             // This section downloads the xml data generated and outputs the terminal T symbol on the marker
 
-            downloadUrl('./PHP/sql_to_xml.php', function(xml_data) {   
+            downloadUrl('http://fast.tliapp.com.mx/sql_to_xml.php', function(xml_data) {   
                 var xml = xml_data.responseXML;
                 var markers = xml.documentElement.getElementsByTagName('marker');
                 Array.prototype.forEach.call(markers, function(markerElem) {
