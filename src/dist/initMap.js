@@ -1,16 +1,18 @@
-  /**
+        /**
          * Declaracion de variables globales 
          **/
-        var customLabel = {
-            terminal: {
-                label: 'T'
-            }
-        };
+        
 
         var airport = {
-            lat: 33.64017019720775,
-            lng: -84.444197108928
+            lat: 21.3500041,
+            lng: -98.244856
         };
+
+        /**
+         * Originales
+         *  lat: 33.64017019720775,
+         *  lng: -84.444197108928
+         */
 
         var Path; // Polyline
         var map;
@@ -21,13 +23,14 @@
         var destino;
         var origen;
 
-
         function initMap(){
             map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 18,
+                zoom: 14,
                 center: airport,
                 mapTypeId: 'terrain'
             });
+
+             
 
             /**
              * Method to search origin place
@@ -39,6 +42,26 @@
              **/
             actionInputDestino();
 
+
+            /**
+             * Marcadores con un click
+             */
+           
+            google.maps.event.addListener(map, 'click', function(event) {
+                    
+
+                var checkBox = document.getElementById("switch_action").checked;
+                // If the checkbox is checked, display the output text
+                if (checkBox){
+                    alert(event.latLng.lat() + ", " + event.latLng.lng());
+                } else {
+            
+                }
+            });   
+               
+           
+           
+            
 
             
 
@@ -53,12 +76,23 @@
                 var markers = xml.documentElement.getElementsByTagName('marker');
                 Array.prototype.forEach.call(markers, function(markerElem) {
                     var id = markerElem.getAttribute('id');
+                    var name = markerElem.getAttribute('nombre');
                     var type = "terminal";
                     var point = new google.maps.LatLng(
                         parseFloat(markerElem.getAttribute('lat')),
                         parseFloat(markerElem.getAttribute('lng'))
                         );                  
-                    
+                    var customLabel = {
+                        terminal: {
+                             label: {
+                                 text: name,
+                                 color: 'black',
+                                 fontSize: "15px",
+                                
+                             }
+                             
+                          }
+                        };
                     
                     var icon = customLabel[type] || {};
                     var marker = new google.maps.Marker({
@@ -301,3 +335,7 @@
             button: "Encontrar ruta",
             });
     }
+
+
+
+    

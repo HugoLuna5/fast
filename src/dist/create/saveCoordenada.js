@@ -5,6 +5,11 @@ var createElement = document.getElementById('btnSaveCoordenate');
 
           var latitud = document.getElementById('latitud').value;
           var longitud = document.getElementById('longitud').value;
+          var nombre = document.getElementById('nombre').value;
+
+
+
+          if(latitud != "" && longitud != "" && nombre != ""){
           console.log(latitud);
           console.log(longitud);
 
@@ -12,7 +17,7 @@ var createElement = document.getElementById('btnSaveCoordenate');
                 dataType: 'json',
                 url:   'http://fast.tliapp.com.mx/create.php', //archivo que recibe la peticion
                 type:  'POST', //método de envio
-                data:  {'latitud': latitud,'longitud': longitud}, //datos que se envian a traves de ajax
+                data:  {'latitud': latitud,'longitud': longitud, 'nombre': nombre}, //datos que se envian a traves de ajax
                 beforeSend: function () {
                         console.log("despues");
                 },
@@ -25,5 +30,9 @@ var createElement = document.getElementById('btnSaveCoordenate');
                     
                 }
         });
+        }else{
+                swal("¡Upss!", "Los campos deben tener valores!", "error");
+
+        }
 
       });
