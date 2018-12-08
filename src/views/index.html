@@ -60,9 +60,13 @@
       <input id="destination-input" class="controls form-control mr-sm-2" type="search" placeholder="Destino" aria-label="Search">
       <button id="getRoute" class="btn btn-success my-2 my-sm-0" type="submit">Encontrar</button>
 
+      <!--
+          <input type="text" id="end_point">
+      -->
+
       <!-- Rounded switch -->
       
-     <label class="switch" id="label_switch" data-toggle="tooltip" data-placement="bottom" title="Agregar marcador con clik ">
+     <label class="switch" id="label_switch" data-toggle="tooltip" data-placement="bottom" title="Agregar marcador con click ">
         <input type="checkbox" name="switch_action" id="switch_action">
         <span class="slider round"></span>
       </label>
@@ -145,12 +149,14 @@
                     phpmyadmin. Así como IDE como visual Studio Code
                     </p>
 
-                    <h6 class="text-center">Desarrollada por:</h6>
-                        <div class="text-center">
+                    <h6 class="text-left">Desarrollada por:</h6>
+                        <div class="text-left">
                                 <p>Gustavo Martinez Licona</p>
                                 <p>Gerardo Facundo Del Angel</p>
                                 <p>Hugo Dario Luna Cruz</p>
                         </div>
+
+                        <p class="text-center"> <i>&copy; 2018 Todos los derechos reservados por Fast Inc </i></p>
                 
                 </div>
                 <div class="modal-footer">
@@ -169,8 +175,9 @@
     <script src="../dist/initMap.js"></script>
     <script>
     $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})</script>
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
 
 
   
