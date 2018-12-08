@@ -334,6 +334,11 @@
             icon: "success",
             button: "Encontrar ruta",
             });
+
+
+            setTimeout(function(){
+                alert("Prueba");
+            }, 1000);
     }
 
 
