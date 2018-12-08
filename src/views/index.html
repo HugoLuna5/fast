@@ -1,200 +1,170 @@
-<!doctype html>
-<html lang="es">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css">
-    <title>Fast Desktop App</title>
-    <link rel="stylesheet" href="https://openlayers.org/en/v4.6.5/css/ol.css" type="text/css">
-  	<script src="https://openlayers.org/en/v4.6.5/build/ol.js" type="text/javascript"></script>
-
-  
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
     <style>
-    .nav-link{
-        color: white;
-    }
+        #map{
+            height: 80%;
+            width: 80%;
+        }
     </style>
-
-
-
-  </head>
-  <body onload="initialize_map(); ">
-        <div class="pos-f-t">
-                
-                <nav class="navbar navbar-dark bg-primary">
-                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                  </button>
-                </nav>
-
-
-                <div class="collapse" id="navbarToggleExternalContent">
-                        <div class="bg-primary p-4">
-                              <ul class=" navbar-nav mr-auto mt-2 mt-lg-0" >
-                                      <li class="nav-item" >
-                                        <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">Pedido</a>
-                                      </li>
-                                      <li class="nav-item">
-                                        <a class="nav-link" href="#">Ubicación</a>
-                                      </li>
-                                      <li class="nav-item">
-                                            <a class="nav-link" href="#">Agregar</a>
-                                      </li>
-                                      <li class="nav-item">
-                                            <a class="nav-link" href="#">Rendimiento</a>
-                                      </li>
-                                      <li class="nav-item">
-                                            <a class="nav-link" href="#">Acerca De</a>
-                                      </li>
-                              </ul>
-                        </div>
-                </div>
-
-         </div>
-
-         <div id="status"></div>
-         <div id="map" style="width: 200vh; height: 90vh;">
-
-         
-
-
-
-          <div id="containerMap"></div>
-         </div>
-
-
-
-
-         <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Pedido</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          
-          <form role="form">
-
-            <div class="form-group">
-
-              <input type="text" class="form-control" placeholder="Coordenada">
-
-            </div>
-
-
-
-          </form>
-
-
-
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary">Aceptar</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-        
+    <title>Maps</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script>window.$ = window.jQuery = require('../../node_modules/jquery/dist/jquery.js');</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="../dist/bundle.js"></script>
-    
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../dist/algoritmos/data.js"></script>
+    <script src="../dist/algoritmos/graph.js"></script>
+    <script src="../dist/algoritmos/routing.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <a class="navbar-brand" href="#">A.I.R.S.</a>
+              </div>
+              <ul class="nav navbar-nav">
+                <li><a href="maps.html">Map</a></li>
+              </ul>
+            </div>
+    </nav>
+
+    <h3>Routing</h3>
+    Enter the marker-id:
+    <br>
+    <input type="text" id="end_point">
+    <button id="getRoute">submit</button>    
+
+
+    <div id="map" style="position:fixed; left: 10%;"></div>
+    <br>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjjSjBFWmy0Xgf8kRkaJWjUg8VDx1t8bw&libraries=drawing&callback=initMap">
+    </script>
     <script>
+        var customLabel = {
+            terminal: {
+                label: 'T'
+            }
+        };
 
+        var airport = {
+            lat: 33.64017019720775,
+            lng: -84.444197108928
+        };
 
-
-
-
-
+        var Path; // Polyline
         var map;
-        var mapLat = 21.35144;
-        var mapLng = -98.22733;
-        var mapDefaultZoom = 15;
-        
-        function initialize_map() {
-          map = new ol.Map({
-            target: "map",
-            layers: [
-                new ol.layer.Tile({
-                    source: new ol.source.OSM({
-                          url: "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    })
-                })
-            ],
-            view: new ol.View({
-                center: ol.proj.fromLonLat([mapLng, mapLat]),
-                zoom: mapDefaultZoom
-            })
-          });
-      
+        function initMap(){
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 18,
+                center: airport,
+                mapTypeId: 'terrain'
+            });
 
-          navigator.geolocation.getCurrentPosition(function(position){
+            map.data.loadGeoJson(data);
+            
+            // This section downloads the xml data generated and outputs the terminal T symbol on the marker
 
-          // Get the coordinates of the current position.
-          var lat = position.coords.latitude;
-          var lng = position.coords.longitude;
-    
-         alert(lat);
+            downloadUrl('http://fast.tliapp.com.mx/sql_to_xml.php', function(xml_data) {   
+                var xml = xml_data.responseXML;
+                var markers = xml.documentElement.getElementsByTagName('marker');
+                Array.prototype.forEach.call(markers, function(markerElem) {
+                    var id = markerElem.getAttribute('id');
+                    var type = "terminal";
+                    var point = new google.maps.LatLng(
+                        parseFloat(markerElem.getAttribute('lat')),
+                        parseFloat(markerElem.getAttribute('lng'))
+                        );                  
+                    
+                    
+                    var icon = customLabel[type] || {};
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: point,
+                        label: icon.label,
+                    });
+                });
 
-          },
-          function (error){
-              console.log(error);
-          }
-          ,{maximumAge:60000, timeout:1000, enableHighAccuracy:true});
+                for(var i = 0; i < data.features.length; i++){  // Need to find a better way to compare if the T marker is placed already
+                    var token = false;
 
-    
-        
+                    var coords = data.features[i].geometry.coordinates;
+                    var latLng = new google.maps.LatLng(coords[1],coords[0]);
+                    
+                    var lat_t = parseFloat(latLng.lat());   
+                    var lng_t = parseFloat(latLng.lng());
+                    
+                    Array.prototype.forEach.call(markers, function(markerElem) {
+                        var point = new google.maps.LatLng(
+                                Number(markerElem.getAttribute('lat')),
+                                parseFloat(markerElem.getAttribute('lng'))
+                            );                        
+                        
+                        var lat_p = Number(point.lat());
+                        var lng_p = parseFloat(point.lng());
+                        
+                        if(lat_t == lat_p && lng_t == lng_p){
+                            token = true;
+                        }
+                    });
+                    
+                    if(token == false){
+                        var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map
+                        });
+                    }     
+                }
+            });
+            /*---------------------------------------------------------------------------------------------*/
+            
+            Path = new google.maps.Polyline({
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2
+            });
+            Path.setMap(map);
+            
+            // This section is related to the routing from entry to exit
+            
+            var submit_button = document.getElementById('getRoute');
+            
+            google.maps.event.addDomListener(submit_button, 'click', function() {
+                path_temp = route_setup();
+                console.log(path_temp);
+                for(var i=0;i<path_temp.length;++i){
+                    debugger
+                    var latLng_temp = new google.maps.LatLng(path_temp[i].lat,path_temp[i].lng);
+                    var line = Path.getPath();
+                    line.push(latLng_temp);  
+                }
+            }); 
+            debugger
+            console(line.getPath());          
         }
 
+        function downloadUrl(url, callback) {
+            var request = window.ActiveXObject ?
+                new ActiveXObject('Microsoft.XMLHTTP') :
+                new XMLHttpRequest;
 
+            request.onreadystatechange = function() {
+                if (request.readyState == 4) {
+                    request.onreadystatechange = doNothing;
+                    callback(request, request.status);
+                }
+            };
 
-        
-        function add_map_point(lat, lng) {
-          
-          var vectorLayer = new ol.layer.Vector({
-            source:new ol.source.Vector({
-              features: [new ol.Feature({
-                    geometry: new ol.geom.Point(ol.proj.transform([parseFloat(lng), parseFloat(lat)], 'EPSG:4326', 'EPSG:3857')),
-                })]
-            }),
-            style: new ol.style.Style({
-              image: new ol.style.Icon({
-                anchor: [0.5, 0.5],
-                anchorXUnits: "fraction",
-                anchorYUnits: "fraction",
-                src: "https://upload.wikimedia.org/wikipedia/commons/e/ec/RedDot.svg"
-              })
-            })
-          });
-          map.addLayer(vectorLayer); 
+            request.open('GET', url, true);
+            request.send(null);
         }
-    
-    
-    
-    
-    
-       
-      </script>
 
+        function doNothing() {}
+    </script>
+   
+</body>
 
-
-<!--
-
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjjSjBFWmy0Xgf8kRkaJWjUg8VDx1t8bw&callback=initMap"
-  type="text/javascript"></script>
-
--->
-  </body>
 </html>

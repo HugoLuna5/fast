@@ -1,7 +1,8 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const url = require('url');
 const path = require('path');
 
+process.env.GOOGLE_API_KEY = 'AIzaSyCjjSjBFWmy0Xgf8kRkaJWjUg8VDx1t8bw'
 
 
 if(process.env.NODE_ENV !== 'production'){
@@ -13,6 +14,7 @@ if(process.env.NODE_ENV !== 'production'){
 
 
 let mainWindow;
+
 
 /**
  * Inicializar app (Ventana)
@@ -32,19 +34,9 @@ app.setName('Fast Desktop App');
         maximizable: false,
         resizable: false,
         show: true,
-        webPreferences:  { 
-            webSecurity: true,
-            javascript: true,
-            plugins: true, 
-            safeDialogs: true, 
-            allowRunningInsecureContent: true,
-            webgl: true,
-            experimentalFeatures: true
-         }
         
-        
+
     });
-    
 
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'views/index.html'),
@@ -53,6 +45,7 @@ app.setName('Fast Desktop App');
 
     }));
 
+   
     //const mainMenu = Menu.buildFromTemplate(templateMenu);
     //Menu.setApplicationMenu(mainMenu);
 
@@ -60,6 +53,13 @@ app.setName('Fast Desktop App');
         app.quit();
     });
  });
+
+
+ ipcMain.on('message', function (event, args) {
+    console.log('se reciben'+event);
+    event.sender.send('message', args);
+    
+  })
 
 
  function createNewPedidoWindow(){
