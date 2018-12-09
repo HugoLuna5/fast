@@ -111,12 +111,28 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="margin-left: -60px;">
             
+            <button id="showNode" class=" dropdown-itembtn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Mostrar nodos</button>
+            <div class="dropdown-divider"><i></i></div>
+
+            <button id="setStartNodeAndFinish" class=" dropdown-itembtn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Origen - Destino</button>
+            <div class="dropdown-divider"><i></i></div>
+
             <button id="enlazar" class=" dropdown-itembtn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Enlazar nodos</button>
             <div class="dropdown-divider"><i></i></div>
 
-            <button id="getRoute" class=" dropdown-itembtn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Calcular</button>
+            <button id="getRoute" class=" dropdown-itembtn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Calcular Ruta</button>
 
             <div class="dropdown-divider"><i></i></div>
+
+            <button id="deleteNode" class=" dropdown-itembtn btn-danger my-2 my-sm-0" type="submit" style="margin-left: 10px">Eliminar nodo</button>
+
+            <div class="dropdown-divider"><i></i></div>
+
+            <button id="deleteNodeAll" class=" dropdown-itembtn btn-danger my-2 my-sm-0" type="submit" style="margin-left: 10px">Eliminar todo</button>
+
+            <div class="dropdown-divider"><i></i></div>
+
+
             
           </div>
         </li>
@@ -231,25 +247,48 @@
 
         <!--Modal add enlace-->
         <!-- Modal -->
-<div class="modal fade" id="enlaceModal" tabindex="-1" role="dialog" aria-labelledby="enlaceModalTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="enlaceModalTitle">Enlazar Nodos</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" id="bodyEnlaceModal">
-      
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button id="saveEnlace" type="button" class="btn btn-primary">Guardar</button>
-      </div>
-    </div>
-  </div>
-</div>
+        <div class="modal fade" id="enlaceModal" tabindex="-1" role="dialog" aria-labelledby="enlaceModalTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="enlaceModalTitle">Enlazar Nodos</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" id="bodyEnlaceModal">
+              
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button id="saveEnlace" type="button" class="btn btn-primary">Guardar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--Modal for select node start and node finish-->
+        <div class="modal fade" id="setStartModal" tabindex="-1" role="dialog" aria-labelledby="setStartModalTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="setStartModalTitle">Agregar Punto de origen y destino</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body" id="bodySetStartModal">
+              
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button id="saveStartModal" type="button" class="btn btn-primary">Guardar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
 
 
       <script src="../dist/create/saveCoordenada.js"></script>

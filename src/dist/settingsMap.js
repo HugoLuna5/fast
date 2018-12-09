@@ -26,15 +26,7 @@ var nodes = {
   
   
   };
-  var nodesArray = [
-    {name: "A", coord:[21.3533009995931,-98.23341584603708]},
-    {name: "B", coord:[21.354020445772637,-98.22448945443551]},
-    {name: "C", coord:[21.344907199891512,-98.2274935285322]},
-    {name: "D", coord:[21.349623775074885,-98.22440362374704]},
-    {name: "E", coord:[21.351862096638484,-98.21968293588083]},
-    {name: "F", coord:[21.346026400954827,-98.21659303109567]}
-  
-  ];
+  var nodesArray = [];
 
 
 //base-midnight
@@ -44,6 +36,7 @@ L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
 
 
 
+/*
 var geojson = {
   "type": "FeatureCollection",
   "features": [
@@ -116,36 +109,82 @@ var geojson = {
   ]
 }
 
-L.geoJSON(geojson, {style: {color:"#ff0000"}}).addTo(map);
+*/
+//L.geoJSON(geojson, {style: {color:"#ff0000"}}).addTo(map);
 
 
 
 
-var basicGraph = [
-{start:"A",finish:"B",distance:10},
-{start:"A",finish:"C",distance:15},
+var basicGraph = [];
 
-{start:"B",finish:"F",distance:15},
-{start:"B",finish:"D",distance:12},
-
-{start:"C",finish:"E",distance:10},
-
-{start:"D",finish:"F",distance:1},
-{start:"D",finish:"E",distance:2},
-
-{start:"F",finish:"E",distance:5},
-
-];
-
-var graph = readyGraph(basicGraph);
-var start = "A";
-var finish = "F";
-
-var shortestPath = dijkstra(graph,start,finish);
-debugger;
+var graph;
+var start;
+var finish;
+var shortestPath;
 
 var aux = 0;
 
+var setStartNodeAndFinish =  document.getElementById('setStartNodeAndFinish');
+
+setStartNodeAndFinish.addEventListener('click', function (param) { 
+    param.preventDefault();
+
+
+    /**
+     * jQuery para acceder a el elemento en el DOM
+     */
+     var bodySetStartModal = $('#bodySetStartModal');
+     var options = '';
+     for (let index = 0; index < nodesArray.length; index++) {
+          options += '<option value="'+nodesArray[index].name+'">'+nodesArray[index].name+'</option>'
+         
+     }
+     $('#setStartModal').modal('show');
+     $('#containerSelectOrigin').remove();
+     $('#containerSelectDest').remove();
+    var startDiv = '<div class="form-group" id="containerSelectOrigin"><label for="selectStartNode">Indica el origen</label><select class="form-control" id="selectStartNode">'+options+'</select></div>';
+    var finishDiv = '<div class="form-group" id="containerSelectDest"><label for="selectFinishNode">Indica el destino</label><select class="form-control" id="selectFinishNode">'+options+'</select></div>';
+     bodySetStartModal.append(startDiv);
+     bodySetStartModal.append(finishDiv);
+
+ });
+
+
+ /**
+  * Asignar valor a las variables start and finish
+  */
+ var saveStartModal = document.getElementById('saveStartModal');
+ saveStartModal.addEventListener('click', function (param) { 
+     param.preventDefault();
+     
+        start = document.getElementById('selectStartNode').value;
+        finish = document.getElementById('selectFinishNode').value;
+
+        swal("¡Buen trabajo!", "Se asignaron tus puntos de origen: "+start+" y destino: "+finish, "success");
+        
+         /**
+         * Muestra ek inicio y el destino
+         */
+        setTimeout(function(){
+            showStartFinish(start,finish);
+        },2000);
+
+
+        $('#setStartModal').modal('hide');
+  });
+
+
+
+var showNode = document.getElementById('showNode');
+
+/**
+ * Mostrar todos los nodos
+ */
+showNode.addEventListener('click', function (param) { 
+    param.preventDefault(); 
+    showNodes();
+
+ });
 
 
 var actionEnlazar = document.getElementById('enlazar');
@@ -179,40 +218,41 @@ actionEnlazar.addEventListener('click', function (param) {
     
     }
 
-
+    var LatitudA, LongitudA, LatitudB, LongitudB;//se guardaran las coordenadas para calcular la distancia
 
     var actionSaveNodoEnlace = document.getElementById('saveEnlace');
     actionSaveNodoEnlace.addEventListener('click', function (param) { 
         param.preventDefault();
         console.log('Se mostraran los datos');
-        var LatitudA, LongitudA, LatitudB, LongitudB;//se guardaran las coordenadas para calcular la distancia
+        
 
-        for (let i = 0; i < nodesArray.length; i++) {//recorrer los elementos mostrados en la ventana
+        for (var i = 0; i < nodesArray.length; i++) {//recorrer los elementos mostrados en la ventana
 
             var elementInput = document.getElementById('nodeInfoValue'+i).value;//obtener el valor del input oculto con el inicio
            
 
-            var elementsInput = document.getElementById('inputNodesInfo'+i+'').value;//obtener los valores de los input
+            var elementsInput = document.getElementById('inputNodesInfo'+i).value;//obtener los valores de los input
             var res = elementsInput.split(",");//separarlos por una "," se crea un arreflo
 
             /**
              * Validar que contenga datos el arreglo "res"
              */
+           
             if(res[0] != ""){
-
-                for (let j = 0; j < res.length; j++) {
+                for (var j = 0; j < res.length; j++) {
                 
 
-                    for (let x = 0; x < nodes.length; x++) {//buscar elementos de elementsInput en nodesArray
-                        
-                        if(elementInput == nodesArray[j].name){
-                            LatitudA = nodesArray[j].coord[0];
-                            LongitudA = nodesArray[j].coord[1];
+                    for (var x = 0; x < nodesArray.length; x++) {//buscar elementos de elementsInput en nodesArray
+                       
+                        if(elementInput == nodesArray[x].name){
+                            LatitudA = nodesArray[x].coord[0];
+                            LongitudA = nodesArray[x].coord[1];
                         }
     
-                        if(res[x] == nodesArray[j].name){
-                            LatitudB = nodesArray[j].coord[0];
-                            LongitudB = nodesArray[j].coord[1];
+                        if(res[j] == nodesArray[x].name){
+                            LatitudB = nodesArray[x].coord[0];
+                            LongitudB = nodesArray[x].coord[1];
+                            console.log('Coordenada: '+LatitudB);
                         }
                         
                     }
@@ -226,65 +266,88 @@ actionEnlazar.addEventListener('click', function (param) {
                         basicGraph.push(addElementToConnect);
                         console.log("Elementos Agregados")
                         console.log(basicGraph);
-    
+                   
     
                     
                 }
+            
             }
 
 
 
         }
-
-      
+        /**
+         * Add readyGraph
+         */
+        graph = readyGraph(basicGraph);
+        
+        $('#enlaceModal').modal('hide');
      });
 
+     
 
+
+     /**
+      * Dibuja la linea para enlazar a los elementos
+      */
+     var coordenadaLatitudStart, coordenadaLongitudStart, coordenadaLatitudFinish, coordenadaLongitudFinish;
+     for (var index = 0; index < basicGraph.length; index++) {//enlaces
+
+        for (let x = 0; x < nodesArray.length; x++) {//coordenadas
+            if(nodesArray[x].name == basicGraph[index].start){
+                coordenadaLongitudStart = nodesArray[x].coord[0];
+                coordenadaLongitudFinish = nodesArray[x].coord[1];
+            }
+
+            if(nodesArray[x].name == basicGraph[index].finish){
+                coordenadaLatitudFinish = nodesArray[x].coord[0];
+                coordenadaLongitudFinish = nodesArray[x].coord[1];
+            }
+            
+        }
+
+
+        var polyline = L.polyline([[coordenadaLatitudStart, coordenadaLongitudStart], [coordenadaLatitudFinish, coordenadaLongitudFinish]], {color: '#ff0000'}).addTo(map);
+
+     }
 
      
     
-    
-
+     
+        
     
   });
 
 
   function getDistanceElements(LatitudA, LongitudA, LatitudB, LongitudB){
     var x1=new google.maps.LatLng(LatitudA, LongitudA);
-    var x2=new google.maps.LatLng( LatitudB, LongitudB);
-    return google.maps.geometry.spherical.computeDistanceBetween(x1, x2);
-  }
+    var x2=new google.maps.LatLng(LatitudB, LongitudB);
+    var distancia = google.maps.geometry.spherical.computeDistanceBetween(x1, x2);
 
-
-  var actionSaveEnlace = document.getElementById('saveEnlace');
-  actionSaveEnlace.addEventListener('click', function (param) { 
-      param.preventDefault();
-      $('#enlaceModal').modal('hide');
-   });
- 
-
+    return parseInt(distancia);
+}
 
 var actionSearchRoute = document.getElementById('getRoute');
 
+/**
+ * Funcion para mostrar la ruta cuando
+ * los demas datos ya esten cargados
+ */
 actionSearchRoute.addEventListener('click', function (param) { 
     param.preventDefault();
-    showNodes();
-
-    setTimeout(function(){
-        showStartFinish(start,finish);
-    },2000);
-
+    /**
+        * Agregar los datos a Dijkstra
+        */
+       shortestPath = dijkstra(graph,start,finish);
+    
+    /**
+     * Muestra la ruta más corta
+     */
     setTimeout(function(){
         showPath(start,shortestPath.path);
     },2000);
     
     
-    console.log("Distancia entre el punto A y B");
-
-    var x1=new google.maps.LatLng(21.3533009995931,-98.23341584603708);
-    var x2=new google.maps.LatLng(21.354020445772637,-98.22448945443551);
-    var distancia = google.maps.geometry.spherical.computeDistanceBetween(x1, x2);
-    console.log(distancia)
  });
 
  /**
@@ -294,8 +357,12 @@ actionSearchRoute.addEventListener('click', function (param) {
 
     for(var i = 0; i < nodesArray.length; i++){
         var Doo = [nodesArray[i].coord[0], nodesArray[i].coord[1]];
-       console.log(Doo);
-        L.circleMarker(Doo,{radius:5,color:"#0000ff",fillOpacity:1}).bindPopup('Punto '+nodesArray[i].name).addTo(map);
+       
+        L.circleMarker(Doo,{radius:5,color:"#0000ff",fillOpacity:1}).bindPopup().addTo(map);
+
+        L.marker(Doo).addTo(map)
+        .bindPopup('Punto '+nodesArray[i].name)
+        .openPopup();
 
     }
   /**
@@ -312,27 +379,27 @@ actionSearchRoute.addEventListener('click', function (param) {
   * @param {*} paths 
   */
 function readyGraph(paths) {
-    debugger;
-    var graph = {};
+    
+    var graphReady = {};
     for(var i in paths){
         var path = paths[i];
         var start=path["start"];
         var finish=path["finish"];
         var distance=path["distance"];
-        if(typeof graph[start]=="undefined"){
-            graph[start]={};
-            graph[start][finish]=distance;
+        if(typeof graphReady[start]=="undefined"){
+            graphReady[start]={};
+            graphReady[start][finish]=distance;
         }else{
-            graph[start][finish]=distance;
+            graphReady[start][finish]=distance;
         }
-        if(typeof graph[finish]=="undefined"){
-            graph[finish]={};
-            graph[finish][start]=distance;
+        if(typeof graphReady[finish]=="undefined"){
+            graphReady[finish]={};
+            graphReady[finish][start]=distance;
         }else{
-            graph[finish][start]=distance;
+            graphReady[finish][start]=distance;
         }
     }
-    return graph;
+    return graphReady;
 }
 
 /**
