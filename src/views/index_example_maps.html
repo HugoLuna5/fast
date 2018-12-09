@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  
+    <title>Fast Desktop App</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script>window.$ = window.jQuery = require('../../node_modules/jquery/dist/jquery.js');</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
+    <script src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../dist/algoritmos/data.js"></script>
+    <script src="../dist/algoritmos/graph.js"></script>
+    <script src="../dist/algoritmos/routing.js"></script>
+    <link rel="stylesheet" href="../dist/inputs.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg  navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">Fast</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+      </li>
+      
+
+      <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Coordenadas
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModalCenter">Guardar </a>
+              <a class="dropdown-item" href="#">Leer archivo</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Interpretar imagen</a>
+            </div>
+          </li>
+
+
+      <li class="nav-item">
+            <a class="nav-link" href="#">Rendimiento</a>
+      </li>
+      <li class="nav-item">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModalLong">Acerca</a>
+          </li>
+     
+    </ul>
+    <div class="form-inline my-2 my-lg-0">
+      <input id="origin-input" class="controls form-control mr-sm-2" type="search" placeholder="Origen" aria-label="Search">
+<!--end_point-->
+      <input id="destination-input" class="controls form-control mr-sm-2" type="search" placeholder="Destino" aria-label="Search">
+      <button id="getRoute" class="btn btn-success my-2 my-sm-0" type="submit">Encontrar</button>
+
+      <!--
+          <input type="text" id="end_point">
+      -->
+
+      <!-- Rounded switch -->
+      
+     <label class="switch" id="label_switch" data-toggle="tooltip" data-placement="bottom" title="Agregar marcador con click ">
+        <input type="checkbox" name="switch_action" id="switch_action">
+        <span class="slider round"></span>
+      </label>
+    </div>
+  </div>
+</nav>
+    
+    
+    <div id="map"></div>
+   
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalCenterTitle">Agregar Coordenadas</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form action="http://fast.tliapp.com.mx/create.php" method="post">
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <input required type="text" name="nombre" id="nombre" class="form-control" placeholder="Escribe el nombre de la ubicacion">
+                </div>
+
+                <div class="form-group">
+                    <input required name="latitud" id="latitud" type="text" class="form-control" placeholder="Latitud: 33.64017019720775">
+                </div>
+
+                <div class="form-group">
+                    <input required name="longitud" id="longitud" type="text" class="form-control" placeholder="Longitud: -84.444197108928">
+                </div>
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerra</button>
+              <button id="btnSaveCoordenate" type="button" class="btn btn-primary">Guardar</button>
+            </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+
+
+      <!--Modal acerca-->
+      <!-- Modal -->
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Acerca De:</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <h4 class="text-center">Fast Desktop App</h4>
+                    <hr>
+                    <h6 class="text-left">Problematica:</h6>
+                    <p align="justify">
+                            La idea de la realización del programa llamado “Fast” surgió de acuerdo a la problemática
+                            a que varios usuarios desean hacer pedidos de encargos a el punto donde se localizan y el
+                            punto donde el repartidor recogerá el pedido para entregárselo y sin necesidad de salir 
+                            desde sus propias casas ya que colocan su punto de inicio y su punto de entrega o cual podrá
+                            iniciar.
+                    </p>
+                    
+                    <h6 class="text-left">Herramientas, lenguajes y librerías:</h6>    
+                    <p align="justify">
+                    Dentro de este proyecto se empleó el uso de algunas herramientas tales como NPM,
+                    y el lenguaje JavaScript además del uso de Electron.js Dentro de las librerías 
+                    esta el uso de los Mapas de Google. Se incluye el us de una base de datos con 
+                    phpmyadmin. Así como IDE como visual Studio Code
+                    </p>
+
+                    <h6 class="text-left">Desarrollada por:</h6>
+                        <div class="text-left">
+                                <p>Gustavo Martinez Licona</p>
+                                <p>Gerardo Facundo Del Angel</p>
+                                <p>Hugo Dario Luna Cruz</p>
+                        </div>
+
+                        <p class="text-center"> <i>&copy; 2018 Todos los derechos reservados por Fast Inc </i></p>
+                
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+      <script src="../dist/create/saveCoordenada.js"></script>
+
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjjSjBFWmy0Xgf8kRkaJWjUg8VDx1t8bw&libraries=drawing,places&callback=initMap">
+    </script>
+    <script src="../dist/initMap.js"></script>
+    <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+
+
+  
+</body>
+
+</html>
