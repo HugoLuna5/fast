@@ -37,7 +37,7 @@ var nodes = {
   ];
 
 
-
+//base-midnight
 L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
     attribution: '<a style="color:#000" target="_blank" href="http://www.github.com/HugoLuna5/fast">Repository Fast</a> | <a style="color:#000" href="mailto:hugo_1199@hotmail.com">hugo_1199@hotmail.com</a>'
 }).addTo(map);
@@ -139,11 +139,30 @@ var finish = "F";
 var shortestPath = dijkstra(graph,start,finish);
 debugger;
 
+var aux = 0;
 
 
 
+var actionEnlazar = document.getElementById('enlazar');
+actionEnlazar.addEventListener('click', function (param) {
+    param.preventDefault();
+    //enlaceModal
+    $('#enlaceModal').modal('show');
 
 
+    var bodyEnlaceModal = $('#bodyEnlaceModal');
+    
+    
+
+      bodyEnlaceModal.append('<p>'+nodesArray[aux].name+'</p>');   
+    
+  });
+
+  var actionSaveEnlace = document.getElementById('saveEnlace');
+  actionSaveEnlace.addEventListener('click', function (param) { 
+      param.preventDefault();
+      $('#enlaceModal').modal('hide');
+   });
  
 
 
@@ -162,8 +181,12 @@ actionSearchRoute.addEventListener('click', function (param) {
     },2000);
     
     
+    console.log("Distancia entre el punto A y B");
 
-    
+    var x1=new google.maps.LatLng(21.3533009995931,-98.23341584603708);
+    var x2=new google.maps.LatLng(21.354020445772637,-98.22448945443551);
+    var distancia = google.maps.geometry.spherical.computeDistanceBetween(x1, x2);
+    console.log(distancia)
  });
 
  /**

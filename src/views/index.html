@@ -101,7 +101,27 @@
       <input id="origin-input" class="controls form-control mr-sm-2" type="search" placeholder="Lugar" aria-label="Search">
       <button id="addNode" class="btn btn-info my-2 my-sm-0" type="submit" >Agregar nodo</button>
 
-      <button id="getRoute" class="btn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Calcular</button>
+ 
+
+      <ul class="navbar-nav mr-auto">
+        
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Opciones
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="margin-left: -60px;">
+            
+            <button id="enlazar" class=" dropdown-itembtn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Enlazar nodos</button>
+            <div class="dropdown-divider"><i></i></div>
+
+            <button id="getRoute" class=" dropdown-itembtn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Calcular</button>
+
+            <div class="dropdown-divider"><i></i></div>
+            
+          </div>
+        </li>
+        </ul>
+
 
     </div>
     
@@ -186,8 +206,8 @@
                     <p align="justify">
                     Dentro de este proyecto se empleó el uso de algunas herramientas tales como NPM,
                     y el lenguaje JavaScript además del uso de Electron.js Dentro de las librerías 
-                    esta el uso de los Mapas de Google. Se incluye el us de una base de datos con 
-                    phpmyadmin. Así como IDE como visual Studio Code
+                    esta el uso de los Mapas de Google. Se incluye el uso de una base de datos MySQL.
+                    Así como el IDE como visual Studio Code.
                     </p>
 
                     <h6 class="text-left">Desarrollada por:</h6>
@@ -208,6 +228,30 @@
         </div>
 
 
+
+        <!--Modal add enlace-->
+        <!-- Modal -->
+<div class="modal fade" id="enlaceModal" tabindex="-1" role="dialog" aria-labelledby="enlaceModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="enlaceModalTitle">Enlazar Nodos</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="bodyEnlaceModal">
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button id="saveEnlace" type="button" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
       <script src="../dist/create/saveCoordenada.js"></script>
 
 
@@ -218,7 +262,7 @@
         $('[data-toggle="tooltip"]').tooltip()
     })
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjjSjBFWmy0Xgf8kRkaJWjUg8VDx1t8bw&libraries=drawing,places&callback=initMap">
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjjSjBFWmy0Xgf8kRkaJWjUg8VDx1t8bw&libraries=drawing,places,geometry&callback=initMap">
 </script>
 
 <script src="../dist/settingsMap.js"></script>
