@@ -124,12 +124,17 @@ L.geoJSON(geojson, {style: {color:"#ff0000"}}).addTo(map);
 var basicGraph = [
 {start:"A",finish:"B",distance:10},
 {start:"A",finish:"C",distance:15},
+
 {start:"B",finish:"F",distance:15},
 {start:"B",finish:"D",distance:12},
+
 {start:"C",finish:"E",distance:10},
-{start:"F",finish:"E",distance:5},
+
 {start:"D",finish:"F",distance:1},
-{start:"D",finish:"E",distance:2}
+{start:"D",finish:"E",distance:2},
+
+{start:"F",finish:"E",distance:5},
+
 ];
 
 var graph = readyGraph(basicGraph);
@@ -151,12 +156,105 @@ actionEnlazar.addEventListener('click', function (param) {
 
 
     var bodyEnlaceModal = $('#bodyEnlaceModal');
+    /**
+     * Limpiar contenedor modal
+     */
+    for (let index = 0; index < nodesArray.length; index++) {
+
+        if($('#containerNodesInfo'+index)){
+            $('#containerNodesInfo'+index).remove();
+        }
+      
+        
+    }
+    
+    for (let i = 0; i < nodesArray.length; i++) {//primer valor
+        
+        var containerNodesInfo = '<div class="form-group" id="containerNodesInfo'+i+'"><input type="hidden" id="nodeInfoValue'+i+'" value="'+nodesArray[i].name+'" />  <label for="inputNodesInfo'+i+'">Nodos conectados al nodo '+nodesArray[i].name+'</label> <input id="inputNodesInfo'+i+'" placeholder="Escribe a que nodo esta conectado (Ejemplo: NodoA,NodoB,NodoF)" class="form-control" /></div>';
+        bodyEnlaceModal.append(containerNodesInfo);
+
+      
+          
+      
+    
+    }
+
+
+
+    var actionSaveNodoEnlace = document.getElementById('saveEnlace');
+    actionSaveNodoEnlace.addEventListener('click', function (param) { 
+        param.preventDefault();
+        console.log('Se mostraran los datos');
+        var LatitudA, LongitudA, LatitudB, LongitudB;//se guardaran las coordenadas para calcular la distancia
+
+        for (let i = 0; i < nodesArray.length; i++) {//recorrer los elementos mostrados en la ventana
+
+            var elementInput = document.getElementById('nodeInfoValue'+i).value;//obtener el valor del input oculto con el inicio
+           
+
+            var elementsInput = document.getElementById('inputNodesInfo'+i+'').value;//obtener los valores de los input
+            var res = elementsInput.split(",");//separarlos por una "," se crea un arreflo
+
+            /**
+             * Validar que contenga datos el arreglo "res"
+             */
+            if(res[0] != ""){
+
+                for (let j = 0; j < res.length; j++) {
+                
+
+                    for (let x = 0; x < nodes.length; x++) {//buscar elementos de elementsInput en nodesArray
+                        
+                        if(elementInput == nodesArray[j].name){
+                            LatitudA = nodesArray[j].coord[0];
+                            LongitudA = nodesArray[j].coord[1];
+                        }
+    
+                        if(res[x] == nodesArray[j].name){
+                            LatitudB = nodesArray[j].coord[0];
+                            LongitudB = nodesArray[j].coord[1];
+                        }
+                        
+                    }
+    
+                    /**
+                     * Guardar datos
+                     */
+                    var addElementToConnect = {start:elementInput,finish:res[j],distance:getDistanceElements(LatitudA, LongitudA, LatitudB, LongitudB)};
+                        console.log("Elementos Originales")
+                        console.log(basicGraph);
+                        basicGraph.push(addElementToConnect);
+                        console.log("Elementos Agregados")
+                        console.log(basicGraph);
+    
+    
+                    
+                }
+            }
+
+
+
+        }
+
+      
+     });
+
+
+
+     
     
     
 
-      bodyEnlaceModal.append('<p>'+nodesArray[aux].name+'</p>');   
     
   });
+
+
+  function getDistanceElements(LatitudA, LongitudA, LatitudB, LongitudB){
+    var x1=new google.maps.LatLng(LatitudA, LongitudA);
+    var x2=new google.maps.LatLng( LatitudB, LongitudB);
+    return google.maps.geometry.spherical.computeDistanceBetween(x1, x2);
+  }
+
 
   var actionSaveEnlace = document.getElementById('saveEnlace');
   actionSaveEnlace.addEventListener('click', function (param) { 
@@ -420,7 +518,7 @@ function initMap(){
    addNode.addEventListener('click', function (param) { 
         param.preventDefault();
         if(origenLatitud != null && origenLongitud != null ){
-            alert('Latitud: '+origenLatitud+' Longitud: '+origenLongitud+ ' Nombre: '+origen);
+            //alert('Latitud: '+origenLatitud+' Longitud: '+origenLongitud+ ' Nombre: '+origen);
 
             var myLatLng = [origenLatitud, origenLongitud]; 
             console.log(myLatLng);
