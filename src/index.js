@@ -32,7 +32,7 @@ app.setName('Fast Desktop App');
         title: 'Fast Desktop App ',
         center: true, 
         maximizable: false,
-        resizable: false,
+        resizable: true,
         show: true,
         
 
