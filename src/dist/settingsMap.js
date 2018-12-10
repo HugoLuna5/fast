@@ -12,20 +12,9 @@ var centerLat = -98.244856;
 
 var map = L.map('map').setView([centerLng,centerLat], 15);
 var buffer = 0.04;
-var collection = [];
-var geojsonlist = [];
-var nodes = {
-    "A":{coord:[21.3533009995931,-98.23341584603708]},
-    "B":{coord:[21.354020445772637,-98.22448945443551]},
-    "C":{coord:[21.344907199891512,-98.2274935285322]},
-    "D":{coord:[21.349623775074885,-98.22440362374704]},
-    "E":{coord:[21.351862096638484,-98.21968293588083]},
-    "F":{coord:[21.346026400954827,-98.21659303109567]}
-  
-  
-  
-  
-  };
+//var collection = [];
+//var geojsonlist = [];
+
   var nodesArray = [];
 
 
@@ -282,38 +271,50 @@ actionEnlazar.addEventListener('click', function (param) {
         graph = readyGraph(basicGraph);
         
         $('#enlaceModal').modal('hide');
-     });
-
-     
 
 
-     /**
+
+        /**
       * Dibuja la linea para enlazar a los elementos
       */
-     var coordenadaLatitudStart, coordenadaLongitudStart, coordenadaLatitudFinish, coordenadaLongitudFinish;
-     for (var index = 0; index < basicGraph.length; index++) {//enlaces
-
-        for (let x = 0; x < nodesArray.length; x++) {//coordenadas
-            if(nodesArray[x].name == basicGraph[index].start){
-                coordenadaLongitudStart = nodesArray[x].coord[0];
-                coordenadaLongitudFinish = nodesArray[x].coord[1];
-            }
-
-            if(nodesArray[x].name == basicGraph[index].finish){
-                coordenadaLatitudFinish = nodesArray[x].coord[0];
-                coordenadaLongitudFinish = nodesArray[x].coord[1];
-            }
-            
-        }
-
-
-        var polyline = L.polyline([[coordenadaLatitudStart, coordenadaLongitudStart], [coordenadaLatitudFinish, coordenadaLongitudFinish]], {color: '#ff0000'}).addTo(map);
-
-     }
-
      
+    var coordenadaLatitudStart, coordenadaLongitudStart, coordenadaLatitudFinish, coordenadaLongitudFinish;
+    for (var index = 0; index < basicGraph.length; index++) {//enlaces
+
+       for (var x = 0; x < nodesArray.length; x++) {//coordenadas
+
+           if(nodesArray[x].name == basicGraph[index].start){
+               coordenadaLatitudStart = nodesArray[x].coord[0];
+               
+               coordenadaLongitudStart = nodesArray[x].coord[1];
+           }
+
+           if(nodesArray[x].name == basicGraph[index].finish){
+               coordenadaLatitudFinish = nodesArray[x].coord[0];
+               coordenadaLongitudFinish = nodesArray[x].coord[1];
+           }
+           
+       }
+       console.log("Llego a dibujar");
+       var lineCoordsDib = [];
+
+       lineCoordsDib.push([coordenadaLatitudStart, coordenadaLongitudStart]);
+       lineCoordsDib.push([coordenadaLatitudFinish, coordenadaLongitudFinish]);
+      
+
     
-     
+   
+  
+    
+        var polylineDib = L.polyline(lineCoordsDib, {color: 'red'}).addTo(map);
+       
+    
+    }
+    
+
+
+     });
+
         
     
   });
@@ -343,9 +344,9 @@ actionSearchRoute.addEventListener('click', function (param) {
     /**
      * Muestra la ruta más corta
      */
-    setTimeout(function(){
+    //setTimeout(function(){
         showPath(start,shortestPath.path);
-    },2000);
+    //},2000);
     
     
  });
@@ -450,7 +451,18 @@ function dijkstra(graph,s,f) {
  */
 function showPath(start,path){
     var lineCoords = [];
-    lineCoords.push([nodesArray[0].coord[0], nodesArray[0].coord[1]]);
+
+    /**
+     * Search node start
+     */
+    for (let index = 0; index < nodesArray.length; index++) {
+       if(start == nodesArray[index].name){
+        lineCoords.push([nodesArray[index].coord[0], nodesArray[index].coord[1]]);
+       }
+        
+    }
+
+    
    
   
   
@@ -590,7 +602,10 @@ function initMap(){
             var myLatLng = [origenLatitud, origenLongitud]; 
             console.log(myLatLng);
             L.circleMarker(myLatLng,{radius:5,color:"#0000ff",fillOpacity:1}).bindPopup('Punto '+origen).addTo(map);
-
+            
+            L.marker(myLatLng).addTo(map)
+            .bindPopup('Punto '+origen)
+            .openPopup();
             var addCoord = 
                 { 
                     name: origen, 
@@ -601,6 +616,9 @@ function initMap(){
             console.log(nodesArray);
             nodesArray.push(addCoord);
             console.log(nodesArray);
+            document.getElementById('origin-input').value = null;
+            origenLatitud = null;
+            origenLongitud = null;
 
         }else{
             swal("Upss", "Debes buscar una direccion para agregar un nodo", "error");
