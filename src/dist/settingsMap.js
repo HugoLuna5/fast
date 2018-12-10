@@ -280,24 +280,48 @@ var actionSearchRoute = document.getElementById('getRoute');
 actionSearchRoute.addEventListener('click', function (param) { 
     param.preventDefault();
     /**
-        * Agregar los datos a Dijkstra
+     * Validar si el algoritmo dijkstra fue seleccionado
+     */
+    var dijkstraSwitch = document.getElementById('switch_actionDijkstra').checked;
+    if(dijkstraSwitch){
+        /**
+        * Calcula la ruta mas corta con el algoritmo Dijkstra
         */
        shortestPath = dijkstra(graph,start,finish);
     
+       /**
+        * Muestra (Dibuja) la ruta más corta
+        */
+           showPath(start,shortestPath.path);
+      
+       $('#modalRendimiento').modal('show');
+    
+       var contenedorRendimiento = $('#displayRendimiento');
+       var content = '<div class="card"> <div class="card-body"> <h5>Rendimiento de algoritmo Dijkstra</h5> <i>'+timeDijkstra+'</i>  </div></div>'
+       
+       contenedorRendimiento.append(content);
+    }
+
     /**
-     * Muestra la ruta más corta
+     * Validar si el algoritmo Floyd fue seleccionado
      */
-    //setTimeout(function(){
-        showPath(start,shortestPath.path);
-    //},2000);
+    var floydSwitch = document.getElementById('switch_actionFloyd').checked;
+    if(switch_actionWarshall){
 
 
-    $('#modalRendimiento').modal('show');
-    
-    var contenedorRendimiento = $('#displayRendimiento');
-    var content = '<div class="card"> <div class="card-body"> <h5>Rendimiento de algoritmo Dijkstra</h5> <i>'+timeDijkstra+'</i>  </div></div>'
-    
-    contenedorRendimiento.append(content);
+    }
+
+    /**
+     * Validar si el algoritmo Warshall fue seleccionado
+     */
+    var warshallSwitch = document.getElementById('switch_actionWarshall').checked;
+    if(warshallSwitch){
+
+    }
+
+
+
+   
  });
 
  /**
@@ -469,6 +493,108 @@ function showStartFinish(start,finish){
   L.circleMarker(coordinateStart,{radius:8,color:"#00ff00",fillOpacity:1}).bindPopup(start+' Inicio').addTo(map);
   L.circleMarker(coordinateFinish,{radius:8,color:"#ff0000",fillOpacity:1}).bindPopup(finish+'  Final').addTo(map);
 }
+
+
+
+
+
+var readFile = document.getElementById('readFile');
+
+/**
+ * Leer coordenas por archivo txt
+ */
+var saveLines = "";
+readFile.addEventListener('click', function (param) { 
+    param.preventDefault();
+
+    /**
+     * Acces to input 
+     */
+    var inputFile = document.getElementById('fileTxt');
+    inputFile.click();
+
+    inputFile.addEventListener('change', function (param) { 
+        param.preventDefault();
+        //console.log('archivo: '+inputFile.value);
+        
+     });
+
+     $('#fileTxt').change(function () {
+        var input = document.getElementById("fileTxt");
+        var fReader = new FileReader();
+        fReader.readAsDataURL(input.files[0]);
+        fReader.onloadend = function(event){
+        
+        //console.log(event.target.result);
+
+        readTextFile(event.target.result);
+        
+
+        var lines = saveLines.split('\n');
+        alert(lines)
+       
+        for(var line = 0; line < lines.length; line++){
+            //console.log(lines[line]);
+            var lineaResult = lines[line].split(',');
+
+
+            var addCoord = 
+            { 
+                name: lineaResult[0], 
+                coord:[lineaResult[1],lineaResult[2]] 
+            };
+           
+
+            
+            console.log(nodesArray);
+            nodesArray.push(addCoord);
+            console.log(nodesArray);
+           
+
+
+           
+        }
+
+    }
+    });
+
+   
+
+     
+ });
+
+ function readTextFile(file)
+ {
+     var rawFile = new XMLHttpRequest();
+     rawFile.open("GET", file, false);
+     rawFile.onreadystatechange = function ()
+     {
+         if(rawFile.readyState === 4)
+         {
+             if(rawFile.status === 200 || rawFile.status == 0)
+             {
+                  saveLines = rawFile.responseText;
+                 
+             }
+         }
+     }
+     rawFile.send(null);
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**
