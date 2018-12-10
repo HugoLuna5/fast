@@ -46,8 +46,8 @@ app.setName('Fast Desktop App');
     }));
 
    
-    const mainMenu = Menu.buildFromTemplate(templateMenu);
-    Menu.setApplicationMenu(mainMenu);
+    //const mainMenu = Menu.buildFromTemplate(templateMenu);
+    //Menu.setApplicationMenu(mainMenu);
 
     mainWindow.on('closed', () => {
         app.quit();

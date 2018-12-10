@@ -306,8 +306,25 @@ actionSearchRoute.addEventListener('click', function (param) {
      * Validar si el algoritmo Floyd fue seleccionado
      */
     var floydSwitch = document.getElementById('switch_actionFloyd').checked;
-    if(switch_actionWarshall){
+    if(floydSwitch){
+        /**
+         * Crear matriz NxN
+         */
+        var nDoo = [];
+        /**
+         * Pasar distancia para poblar el arreglo "grafo"
+         */
+        
 
+         
+        var grafo = [
+                             [NaN, 7,   9,   NaN, NaN, 16],
+				             [7,   NaN, 10,  15,  NaN, NaN],
+				             [9,   10,  NaN, 11,  NaN, 2],
+				             [NaN, 15,  11,  NaN, 6,   NaN],
+				             [NaN, NaN, NaN, 6,   NaN, 9],
+				             [16,  NaN, 2,   NaN, 9,   NaN]];
+                             algoritmoFloydWarshall.floydWarshall(grafo);
 
     }
 
@@ -385,7 +402,7 @@ function readyGraph(paths) {
 function dijkstra(graph,s,f) {
     //debugger;
 
-    
+    //cronometro para medir el tiempo de ejecucion
     chronometer.start();
 
     
@@ -427,6 +444,8 @@ function dijkstra(graph,s,f) {
 
     return {results:solutions,path:finish,distance:finish.dist};
 }
+
+
 
 /**
  * Mostrar la ruta más corta en la vista 
