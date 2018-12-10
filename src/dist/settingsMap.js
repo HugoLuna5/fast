@@ -4,13 +4,14 @@
 var origenLatitud;
 var origenLongitud;
 var origen;
+var marker = new Array();
 
 
 var centerLng = 21.3500041;
 var centerLat = -98.244856;
 
 
-var map = L.map('map').setView([centerLng,centerLat], 15);
+var map = L.map('map').setView([centerLng,centerLat], 12);
 var buffer = 0.04;
 //var collection = [];
 //var geojsonlist = [];
@@ -23,87 +24,6 @@ L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
     attribution: '<a style="color:#000" target="_blank" href="http://www.github.com/HugoLuna5/fast">Repository Fast</a> | <a style="color:#000" href="mailto:hugo_1199@hotmail.com">hugo_1199@hotmail.com</a>'
 }).addTo(map);
 
-
-
-/*
-var geojson = {
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -98.23341584603708,
-          21.3533009995931
-        ]
-      },
-      "properties": {}
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -98.22448945443551,
-          21.354020445772637
-        ]
-      },
-      "properties": {}
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -98.2274935285322,
-          21.344907199891512
-        ]
-      },
-      "properties": {}
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -98.22440362374704,
-          21.349623775074885
-        ]
-      },
-      "properties": {}
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -98.21968293588083,
-          21.351862096638484
-        ]
-      },
-      "properties": {}
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -98.21659303109567,
-          21.346026400954827
-        ]
-      },
-      "properties": {}
-    }
-  ]
-}
-
-*/
-//L.geoJSON(geojson, {style: {color:"#ff0000"}}).addTo(map);
-
-
-
-
 var basicGraph = [];
 
 var graph;
@@ -112,6 +32,18 @@ var finish;
 var shortestPath;
 
 var aux = 0;
+
+
+
+/**
+ * Evento eliminar todos los elementos
+ */
+var deleteElements = document.getElementById('deleteNodeAll');
+deleteElements.addEventListener('click', function (param) { 
+    param.preventDefault();
+    location.reload();
+
+ });
 
 var setStartNodeAndFinish =  document.getElementById('setStartNodeAndFinish');
 
@@ -601,9 +533,13 @@ function initMap(){
 
             var myLatLng = [origenLatitud, origenLongitud]; 
             console.log(myLatLng);
-            L.circleMarker(myLatLng,{radius:5,color:"#0000ff",fillOpacity:1}).bindPopup('Punto '+origen).addTo(map);
+            var LamMarker =  L.circleMarker(myLatLng,{radius:5,color:"#0000ff",fillOpacity:1}).bindPopup('Punto '+origen).addTo(map);
             
-            L.marker(myLatLng).addTo(map)
+           
+            marker.push(LamMarker);
+           
+
+            var LamMarker2 = L.marker(myLatLng).addTo(map)
             .bindPopup('Punto '+origen)
             .openPopup();
             var addCoord = 
@@ -611,6 +547,7 @@ function initMap(){
                     name: origen, 
                     coord:[origenLatitud,origenLongitud] 
                 };
+            marker.push(LamMarker2);
 
             
             console.log(nodesArray);
@@ -620,6 +557,7 @@ function initMap(){
             origenLatitud = null;
             origenLongitud = null;
 
+            console.log(marker);
         }else{
             swal("Upss", "Debes buscar una direccion para agregar un nodo", "error");
 
