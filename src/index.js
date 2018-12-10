@@ -46,8 +46,8 @@ app.setName('Fast Desktop App');
     }));
 
    
-    //const mainMenu = Menu.buildFromTemplate(templateMenu);
-    //Menu.setApplicationMenu(mainMenu);
+    const mainMenu = Menu.buildFromTemplate(templateMenu);
+    Menu.setApplicationMenu(mainMenu);
 
     mainWindow.on('closed', () => {
         app.quit();
@@ -55,70 +55,25 @@ app.setName('Fast Desktop App');
  });
 
 
- ipcMain.on('message', function (event, args) {
-    console.log('se reciben'+event);
-    event.sender.send('message', args);
-    
-  })
+ 
 
 
- function createNewPedidoWindow(){
 
- /**
-     * Crear ventana
-     */
-    let pedidoWindow = new BrowserWindow({
-        height: 330,
-        width: 400,
-        fullscreen: false,
-        title: 'Fast Desktop App Pedido',
-        center: true, 
-        maximizable: false,
-        resizable: false,
-        show: true,
-        webPreferences:  { 
-            webSecurity: true,
-            javascript: true,
-            plugins: true, 
-            safeDialogs: true, 
-            allowRunningInsecureContent: true,
-            webgl: true,
-            experimentalFeatures: true
-         }
-        
-        
-    });
-    
-    pedidoWindow.setMenu(null);
-    pedidoWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'views/pedido.html'),
-        protocol: 'file',
-        slashes: true
-
-    }));
-
-
-}
-
- const templateMenu = [
-     {
-         label: "File",
-            submenu: [
-                {
-                    label: 'Pedido',
-                    accelerator: 'Ctrl+N',
-                    click(){
-                        createNewPedidoWindow();
-                    }
-                }, {
-                    label: 'Salir',
-                    click(){
-                        app.exit();
-                    }
-                }
-
-            ]
-     }
- ]
+var templateMenu = [{
+    label: "Application",
+    submenu: [
+        { label: "Salir", accelerator: "Command+Q", click: function() { app.quit(); }}
+    ]}, {
+    label: "Editar",
+    submenu: [
+        { label: "Deshacer", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+        { label: "Rehacer", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+        { type: "separator" },
+        { label: "Cortar", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+        { label: "Copiar", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+        { label: "Pegar", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+        { label: "Seleccionar todo", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+    ]}
+];
 
 
