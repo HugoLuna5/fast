@@ -1,3 +1,14 @@
+
+/**
+ * Rendimiento
+ */
+var timeDijkstra;
+var chronometer = new Chronometer({
+    precision: 10,
+    ontimeupdate: function (t) {
+        timeDijkstra = Chronometer.utils.humanFormat(t);
+    }
+});
 /**
  * Variables globales
  */
@@ -11,7 +22,7 @@ var centerLng = 21.3500041;
 var centerLat = -98.244856;
 
 
-var map = L.map('map').setView([centerLng,centerLat], 12);
+var map = L.map('map').setView([centerLng,centerLat], 15);
 var buffer = 0.04;
 //var collection = [];
 //var geojsonlist = [];
@@ -279,8 +290,14 @@ actionSearchRoute.addEventListener('click', function (param) {
     //setTimeout(function(){
         showPath(start,shortestPath.path);
     //},2000);
+
+
+    $('#modalRendimiento').modal('show');
     
+    var contenedorRendimiento = $('#displayRendimiento');
+    var content = '<div class="card"> <div class="card-body"> <h5>Rendimiento de algoritmo Dijkstra</h5> <i>'+timeDijkstra+'</i>  </div></div>'
     
+    contenedorRendimiento.append(content);
  });
 
  /**
@@ -342,7 +359,12 @@ function readyGraph(paths) {
  * @param {*} f 
  */
 function dijkstra(graph,s,f) {
-    debugger;
+    //debugger;
+
+    
+    chronometer.start();
+
+    
     var solutions = {};
     solutions[s] = [];
     solutions[s].dist = 0;
@@ -373,6 +395,12 @@ function dijkstra(graph,s,f) {
         solutions[nearest].dist = dist;
     }
     var finish = solutions[f];
+
+
+    chronometer.stop();
+
+    
+
     return {results:solutions,path:finish,distance:finish.dist};
 }
 
@@ -412,6 +440,8 @@ function showPath(start,path){
     }
     
     var polyline = L.polyline(lineCoords, {color: 'blue'}).addTo(map);
+
+   
   }
   
 

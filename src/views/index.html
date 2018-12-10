@@ -23,6 +23,9 @@
     <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
     integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
     crossorigin=""></script>
+
+    <script type="text/javascript" src="https://cdn.rawgit.com/lingtalfi/jChronometer/master/www/libs/jchronometer/js/jchronometer.js"></script>
+
     <style>
     
     #map{
@@ -35,7 +38,8 @@
     </style>
 </head>
 
-<body>
+<body id="app">
+
     <nav class="navbar navbar-expand-lg  navbar-dark bg-primary">
   <a class="navbar-brand" href="#">Fast</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,13 +53,11 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Opciones
+                Algoritmos
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModalCenter">Guardar </a>
-          <a class="dropdown-item" href="#">Leer archivo</a>
-          <a class="dropdown-item" href="#">Interpretar imagen</a>
+         
           <div class="dropdown-divider"><i></i></div>
           <center>Algoritmo Dijkstra:</center>
           <center>
@@ -111,6 +113,19 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="margin-left: -60px;">
             
+
+
+         
+            <button data-toggle="modal" data-target="#exampleModalCenter" class=" dropdown-itembtn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Guardar</button>
+
+            <div class="dropdown-divider"><i></i></div>
+
+
+            <button id="readFile" class=" dropdown-itembtn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Leer archivo</button>
+
+            <div class="dropdown-divider"><i></i></div>
+
+
             <button id="showNode" class=" dropdown-itembtn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Mostrar nodos</button>
             <div class="dropdown-divider"><i></i></div>
 
@@ -121,10 +136,6 @@
             <div class="dropdown-divider"><i></i></div>
 
             <button id="getRoute" class=" dropdown-itembtn btn-success my-2 my-sm-0" type="submit" style="margin-left: 10px">Calcular Ruta</button>
-
-            <div class="dropdown-divider"><i></i></div>
-
-            <button id="deleteNode" class=" dropdown-itembtn btn-danger my-2 my-sm-0" type="submit" style="margin-left: 10px">Eliminar nodo</button>
 
             <div class="dropdown-divider"><i></i></div>
 
@@ -291,10 +302,37 @@
 
 
 
+
+
+      <div class="modal fade" id="modalRendimiento" tabindex="-1" role="dialog" aria-labelledby="modalRendimientoTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalRendimientoTitle">Rendimiento</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="displayRendimiento">
+          
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Ok</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
       <script src="../dist/create/saveCoordenada.js"></script>
 
 
    
+    
+    
+    
+    
     
     <script>
     $(function () {
